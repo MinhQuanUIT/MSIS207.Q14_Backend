@@ -3,6 +3,11 @@ const dotenv = require('dotenv');
 dotenv.config(); 
 
 app.use(express.json());
-// mở kết nối api đến route auth 
+// mở kết nối api đến route 
 app.use('/api/auth', require('./routes/auth.routes'));
 
+app.use('api/users', require('./routes/user.routes'));
+
+// kết nối đến database
+const connectDB = require('./config/db');
+connectDB();
