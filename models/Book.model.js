@@ -32,6 +32,12 @@ const bookSchema = new mongoose.Schema({
         required: [true,'Please provide a book title'],
         trim: true
     },
+    bookID:{ // mã sách
+        type: String, 
+        required: true, 
+        default: () => nanoid.nanoid(10), // random 10 ký tự cho id
+        index: { unique: true} // đảm bảo bookID unique
+    },
     author: { // tác giả
         type : String,
         required: [ true,'Please provide an author name'],
