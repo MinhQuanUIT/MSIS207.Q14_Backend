@@ -19,8 +19,11 @@ app.get('/', (req, res) => {
 });
 
 // Import routes
-const userRoutes = require('./routes/userRoutes');
+const userRoutes = require('./routes/user.routes');
+const authRoutes = require('./routes/auth.routes');
+
 app.use('/api/users', userRoutes);
+app.use('/api/auth', authRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {
