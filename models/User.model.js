@@ -2,11 +2,10 @@
 const mongoose = require('mongoose');
 // tạo schema user
 const userSchema = new mongoose.Schema({
-  username: { // yeu cầu username
+  name: {
     type: String,
     required: [true, 'Please provide a name'],
-    trim: true, // loại bỏ khoảng trắng thừa
-    unique: true, // đảm bảo không trùng 
+    trim: true,
     maxlength: [50, 'Name cannot be more than 50 characters']
   },
   email: { // yêu cầu email
@@ -19,14 +18,9 @@ const userSchema = new mongoose.Schema({
       'Please provide a valid email'
     ]
   },
-  phone: { // yêu cầu sđt
+  phone: { // optional phone number
     type: String,
-    required: [true, 'Please provide a phone number'],
-    unique: true,
-    match: [
-      /^\d{10}$/,
-      'Please provide a valid phone number'
-    ]
+    match: [/^\d{10}$/, 'Please provide a valid phone number']
   },
   password: { // yêu cầu mật khẩu
     type: String,

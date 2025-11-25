@@ -1,11 +1,10 @@
-// goi thu vien mongoose
 const mongoose = require('mongoose');
+const { nanoid } = require('nanoid');
 
-// tạo schema cho review book
 const reviewSchema = new mongoose.Schema({
     user: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User', // tham chiếu đến User model
+        ref: 'User',
         required: true
     },
     rating: {
@@ -25,53 +24,51 @@ const reviewSchema = new mongoose.Schema({
     }
 });
 
-// tao schema cho book
 const bookSchema = new mongoose.Schema({
-    title: { // tên sach 
-        type : String,
-        required: [true,'Please provide a book title'],
+    title: {
+        type: String,
+        required: [true, 'Please provide a book title'],
         trim: true
     },
-    bookID:{ // mã sách
-        type: String, 
-        required: true, 
-        default: () => nanoid.nanoid(10), // random 10 ký tự cho id
-        index: { unique: true} // đảm bảo bookID unique
+    bookID: {
+        type: String,
+        required: true,
+        default: () => nanoid(10),
+        unique: true
     },
-    author: { // tác giả
-        type : String,
-        required: [ true,'Please provide an author name'],
+    author: {
+        type: String,
+        required: [true, 'Please provide an author name'],
         trim: true
     },
-    publishedDate: { // ngày xuất bản
+    publishedDate: {
         type: Date,
-        required: [true, 'Please provide a published date'],
         default: Date.now
-    }, 
-    Price:{ // giá 
+    },
+    price: {
         type: Number,
         required: [true, 'Please provide a price'],
         min: [0, 'Price cannot be negative']
     },
-    Sales:{ //. số lượng bán
+    stock: {
         type: Number,
-        required: [true, 'Please provide number of sales'],
+        default: 0,
+        min: [0, 'Stock cannot be negative']
+    },
+    sales: {
+        type: Number,
+        default: 0,
         min: [0, 'Sales cannot be negative']
     },
-    Description:{ // mô tả sách
+    description: {
         type: String,
         trim: true
     },
-    inStock: { // hàng tồn
-        type: Boolean, 
-        default: 0
+    inStock: {
+        type: Boolean,
+        default: false
     },
-    reviews: [reviewSchema] // mảng đánh giá -> xuất từ module review 
-},{ 
-    timestamps: true 
-});
+    reviews: [reviewSchema]
+}, { timestamps: true });
 
-    // rating: đánh giá trung bình , number of reviews : số lượng đánh giá -> API );
-
-// xuất module review và book 
 module.exports = mongoose.model('Book', bookSchema);
