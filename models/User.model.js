@@ -27,7 +27,7 @@ const userSchema = new mongoose.Schema({
     required: [true, 'Please provide a password'],
     minlength: [6, 'Password must be at least 6 characters']
   },
-  role: { // chọn vai trò
+  role: { // vai trò người dùng
     type: String,
     enum: ['user', 'admin'],
     default: 'user'
@@ -37,7 +37,14 @@ const userSchema = new mongoose.Schema({
     default: true
   }
 }, { 
-  timestamps: true // kiểm tra thời gian tạo và cập nhật
+  timestamps: true, // kiểm tra thời gian tạo và cập nhật
+  toJSON: { virtuals: true },
+  toObject: { virtuals: true }
+});
+
+// Virtual property để kiểm tra admin (owner)
+userSchema.virtual('isAdmin').get(function() {
+  return this.role === 'admin';
 });
 
 // xuất module user
