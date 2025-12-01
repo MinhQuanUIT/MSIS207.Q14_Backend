@@ -21,9 +21,17 @@ exports.getUsers = async (req, res) => {
 
 // @desc    Get single user
 // @route   GET /api/users/:id
-// @access  Public
+// @access  Protected (Own data or Admin)
 exports.getUser = async (req, res) => {
   try {
+    // Check if user is accessing their own data or is admin
+    if (req.user.id !== req.params.id && req.user.role !== 'admin') {
+      return res.status(403).json({
+        success: false,
+        message: 'Access denied'
+      });
+    }
+
     const user = await User.findById(req.params.id).select('-password');
     
     if (!user) {
@@ -66,9 +74,25 @@ exports.createUser = async (req, res) => {
 
 // @desc    Update user
 // @route   PUT /api/users/:id
-// @access  Public
+// @access  Protected (Own data or Admin)
 exports.updateUser = async (req, res) => {
   try {
+    // Check if user is updating their own data or is admin
+    if (req.user.id !== req.params.id && req.user.role !== 'admin') {
+      return res.status(403).json({
+        success: false,
+        message: 'Access denied'
+      });
+    }
+
+    // Don't allow users to change their role (only admin can)
+    if (req.body.role && req.user.role !== 'admin') {
+      return res.status(403).json({
+        success: false,
+        message: 'Only admin can change user roles'
+      });
+    }
+
     const user = await User.findByIdAndUpdate(
       req.params.id,
       req.body,

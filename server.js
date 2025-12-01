@@ -2,7 +2,6 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const connectDB = require('./config/db');
-const setupSwagger = require('./docs/swagger');
 
 const app = express();
 
@@ -19,17 +18,16 @@ app.get('/', (req, res) => {
   res.json({ message: 'Welcome to MSIS207 Q14 Backend API' });
 });
 
-// Set up Routers
-app.use('/api/auth', require('./routes/auth.routes'));
-app.use('/api/users', require('./routes/user.routes'));
-app.use('/api/books', require('./routes/book.routes'));
-// app.use('/api/orders', require('./routes/order.routes'));
-app.use('/api/test', require('./routes/test.routes')); // Debug route
-// app.use('/api/cart', require('./routes/cart.routes')); // TODO: Create cart.routes.js
-// app.use('/api/admin', require('./routes/admin.routes')); // TODO: Create admin.routes.js
+// Import routes
+const userRoutes = require('./routes/user.routes');
+const authRoutes = require('./routes/auth.routes');
+const bookRoutes = require('./routes/book.routes');
+const orderRoutes = require('./routes/order.routes');
 
-// Setup Swagger documentation - temporarily disabled
-// setupSwagger(app);
+app.use('/api/users', userRoutes);
+app.use('/api/auth', authRoutes);
+app.use('/api/books', bookRoutes);
+app.use('/api/orders', orderRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {
